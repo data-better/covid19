@@ -177,6 +177,16 @@ coronavirus %>%
                                  "Number of confirmed cases: ", confirmed, sep = "")) %>%
   layout(title = "Total China Confirmed Cases Dist. by Province")
 ```
+---
+title: "Showing the Spatial Distribution of Covid-19 Confirmed Cases"
+author: "Jarrett Byrnes"
+date: "3/11/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
