@@ -46,7 +46,8 @@ data.recovered %<>% cleanData() %>% rename(recovered=count)
 ## merge above 3 datasets into one, by country and date
 data <- data.confirmed %>% merge(data.deaths) %>% merge(data.recovered)
 ## first 10 records when it first broke out in China
-data %>% filter(country=='Mainland China') %>% head(10)
+data %>% filter(country=='China') %>% head(10)
+data %>% filter(country=='Korea, South') %>% head(10)
 
 ## counts for the whole world
 data.world <- data %>% group_by(date) %>%
@@ -88,14 +89,14 @@ top.countries
 # a <- data %>% group_by(country) %>% tally()
 ## put all others in a single group of 'Others'
 df <- data.latest %>% filter(!is.na(country) & country!='World') %>%
-  mutate(country=ifelse(ranking <= 12, as.character(country), 'Others')) %>%
-  mutate(country=country %>% factor(levels=c(top.countries)))
-df %<>% group_by(country) %>% summarise(confirmed=sum(confirmed))
+     mutate(country=ifelse(ranking <= 12, as.character(country), 'Others')) %>%
+     mutate(country=country %>% factor(levels=c(top.countries)))
+df %<>% group_by(country) %>% summarise(confirmed=sum(confirmed, na.rm=TRUE))
+df %<>% mutate(per = (100*confirmed/sum(confirmed, na.rm=TRUE)) %>% round(1)) %>%
+     mutate(txt = paste0(country, ': ', confirmed, ' (', per, '%)'))
 ## precentage and label
-df %<>% mutate(per = (100*confirmed/sum(confirmed)) %>% round(1)) %>%
-  mutate(txt = paste0(country, ': ', confirmed, ' (', per, '%)'))
 # pie(df$confirmed, labels=df$txt, cex=0.7)
-df %>% ggplot(aes(fill=country)) +
+df %>% filter(!is.na(country)) %>% ggplot(aes(fill=country)) +
   geom_bar(aes(x='', y=per), stat='identity') +
   coord_polar("y", start=0) +
   xlab('') + ylab('Percentage (%)') +
