@@ -1,0 +1,28 @@
+library(coronavirus)
+library(dplyr)
+library(ggplot2)
+
+data(covid_south_korea)
+
+# Get summary of total cases by city
+
+Kor =covid_south_korea %>%
+   group_by(city) %>%
+   summarise(total_cases = sum(total))
+
+pie(Kor$total_cases, labels=Kor$city)
+
+Seoul =covid_south_korea %>% filter(city=="seoul")
+
+plot(Seoul$date,Seoul$total, type="l", xlab="date", ylab="total")
+
+Daegu = covid_south_korea %>% filter(city=="daegu")
+
+plot_ly(data = Daegu, 
+        x = ~ date, 
+        y = ~ total , 
+        type = 'bar')
+plot_ly(data = Seoul, 
+        x = ~ date, 
+        y = ~ total , 
+        type = 'bar')
